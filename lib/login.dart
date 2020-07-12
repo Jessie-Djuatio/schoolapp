@@ -5,6 +5,9 @@ import 'package:schoolapp/home_screen.dart';
 import 'package:schoolapp/registration.dart';
 import 'package:schoolapp/service/authService.dart';
 
+import 'components/defaultDialog.dart';
+import 'service/secureStorage.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final _loginKey= GlobalKey<FormState>();
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
+  bool _buttonState = true;
 
   @override
   void initState(){
@@ -110,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-                Row(
+                _buttonState ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
@@ -155,6 +159,11 @@ class _LoginPageState extends State<LoginPage> {
 
                   ],
 
+                )
+                :
+                Padding(
+                  padding: const EdgeInsets.only(top: 35.0),
+                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.green),),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -187,6 +196,9 @@ class _LoginPageState extends State<LoginPage> {
 
   signIn () async {
     if (_loginKey.currentState.validate()) {
+      setState(() {
+        _buttonState = false;
+      });
       print("Username: ${_usernameController.text} \nPassword: ${_passwordController.text}");
 
       dynamic response = await AuthService.login(username: _usernameController.text, password: _passwordController.text);
@@ -194,13 +206,35 @@ class _LoginPageState extends State<LoginPage> {
       print(response);
 
       if (response != "error"){
+        SecureStorage.userProfileStorage(id: response["id"].toString(), username: response["username"], email: response["email"], token: response["accessToken"]);
+
+        setState(() {
+        _buttonState = true;
+        });
         Navigator.push(context,MaterialPageRoute(
             builder: (context)=> HomeScreen()
         ));
       }
       else {
-        print("Mouffff");
+        setState(() {
+        _buttonState = true;
+        });
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return 
+              DefaultAlertDialog(
+                title: "Failure",
+                message: "Incorrect username and/or password, try again !!",
+                icon: Icon(Icons.cancel, color: Colors.green, size: 45,),
+              );
+              
+            },
+          );
       }
+      setState(() {
+        _buttonState = true;
+      });
     }
   }
 

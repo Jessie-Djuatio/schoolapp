@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:schoolapp/login.dart';
 class HomeScreen extends StatefulWidget {
@@ -8,6 +9,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
+  String username = "name";
+  String email = "email";
+  
+  final storage = new FlutterSecureStorage();
+
+  void getUserProfile() async {
+    String name = await storage.read(key: "username");
+    String mail = await storage.read(key: "email");
+    print(name);
+
+    setState(() {
+      username = name;
+      email = mail;
+    });
+  }
+
+  @override
+  void initState() {
+    this.getUserProfile();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -54,9 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       backgroundImage: AssetImage('assets/images/student.png'),),
                                                     title: Padding(
                                                       padding: const EdgeInsets.only(bottom:4.0),
-                                                      child: Text('Mbekou Djuatio Jessie Lorraine', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                                      child: Text(username, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                                                     ),
-                                                    subtitle: Text('djuatiojessie@gmail.com', style: TextStyle(color: Colors.grey, fontSize: 10),),
+                                                    subtitle: Text(email, style: TextStyle(color: Colors.grey, fontSize: 10),),
 
                                                   ),
 
@@ -132,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                crossAxisAlignment: CrossAxisAlignment.start,
 
                                children: <Widget>[
-                                 Text('Mbekou Jessie', style: TextStyle(color: Colors.green, fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),),
+                                 Text(username, style: TextStyle(color: Colors.green, fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),),
                                  Text('FE17A039'),
 
 

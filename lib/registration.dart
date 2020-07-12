@@ -6,6 +6,14 @@ class Registration extends StatefulWidget {
   _RegistrationState createState() => _RegistrationState();
 }
 class _RegistrationState extends State<Registration>{
+  
+  TextEditingController _usernameController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+  TextEditingController _passwordConfirmController = new TextEditingController();
+  TextEditingController _fullnameController = new TextEditingController();
+  TextEditingController _matriculationController = new TextEditingController();
+  TextEditingController _dobController = new TextEditingController();
+
   final GlobalKey<FormState> _formKeyValue =
   new GlobalKey<FormState>();
   var selectedType,
@@ -58,7 +66,14 @@ class _RegistrationState extends State<Registration>{
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _fullnameController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide full name';
+                      }
+                      return null;
+                    },
                     decoration: InputDecoration(
                       icon: Icon(Icons.supervised_user_circle),
                         hintText: 'Enter your full name',
@@ -72,12 +87,19 @@ class _RegistrationState extends State<Registration>{
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     decoration: InputDecoration(
                         icon: Icon(Icons.confirmation_number),
                         hintText: 'Enter your Matriculation number',
                         labelText: 'Matriculation number'
                     ),
+                     controller: _matriculationController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Matriculation';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -86,12 +108,19 @@ class _RegistrationState extends State<Registration>{
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     decoration: InputDecoration(
                         icon: Icon(Icons.account_circle),
                         hintText: 'Enter a user name',
                         labelText: 'User name'
                     ),
+                    controller: _usernameController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Username';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -104,33 +133,54 @@ class _RegistrationState extends State<Registration>{
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
                         icon: Icon(Icons.lock_outline),
                         labelText: 'Password'
                     ),
+                    controller: _passwordController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Password';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
                         icon: Icon(Icons.sync),
                         labelText: 'Confirm Password'
                     ),
+                    controller: _passwordConfirmController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Password Confirmation';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                  child: TextField(
+                  child: TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
                         icon: Icon(Icons.date_range),
                         hintText: '01/01/2020',
                         labelText: 'Date of Birth'
                     ),
+                    controller: _dobController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Date of birth';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 SizedBox(
@@ -181,9 +231,10 @@ class _RegistrationState extends State<Registration>{
 
                           child: GestureDetector(
                             onTap: (){
-                              Navigator.push(context,MaterialPageRoute(
+                              /*Navigator.push(context,MaterialPageRoute(
                                   builder: (context)=> LoginPage()
-                              ));
+                              ));*/
+                              signUp();
 
 
                             },
@@ -238,8 +289,10 @@ class _RegistrationState extends State<Registration>{
     );
   }
 
-  signIn () async {
-    if ( _formKeyValue.currentState.validate() ) {}
+  signUp () async {
+    if ( _formKeyValue.currentState.validate() ) {
+      print("Fullname: ${_fullnameController.text}\nMatriculation: ${_matriculationController.text}\nUsername:: ${_usernameController.text}\nPassword: ${_passwordController.text}\nPassword Confirmation: ${_passwordConfirmController.text}\nDate of birth: ${_dobController.text}\n");
+    }
   }
 
 }
