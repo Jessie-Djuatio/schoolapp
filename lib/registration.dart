@@ -9,10 +9,14 @@ class _RegistrationState extends State<Registration>{
   
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-  TextEditingController _passwordConfirmController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
   TextEditingController _fullnameController = new TextEditingController();
   TextEditingController _matriculationController = new TextEditingController();
   TextEditingController _dobController = new TextEditingController();
+  TextEditingController _facultyController = new TextEditingController();
+  TextEditingController _departmentController = new TextEditingController();
+  TextEditingController _addressController = new TextEditingController();
+
 
   final GlobalKey<FormState> _formKeyValue =
   new GlobalKey<FormState>();
@@ -89,14 +93,50 @@ class _RegistrationState extends State<Registration>{
                   padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
                   child: TextFormField(
                     decoration: InputDecoration(
+                        icon: Icon(Icons.email),
+                        hintText: 'Enter your email',
+                        labelText: 'Email'
+                    ),
+                    controller: _emailController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide email';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
                         icon: Icon(Icons.confirmation_number),
-                        hintText: 'Enter your Matriculation number',
-                        labelText: 'Matriculation number'
+                        hintText: 'Enter your NationalID number',
+                        labelText: 'National ID number'
                     ),
                      controller: _matriculationController,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Provide Matriculation';
+                        return 'Provide National ID number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                  child: TextFormField(
+                   // obscureText: true,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.location_city),
+                        hintText: 'Molyko, Buea',
+                        labelText: 'Address'
+                    ),
+                    controller: _addressController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide  address';
                       }
                       return null;
                     },
@@ -151,15 +191,32 @@ class _RegistrationState extends State<Registration>{
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                   child: TextFormField(
-                    obscureText: true,
+                   // obscureText: true,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.sync),
-                        labelText: 'Confirm Password'
+                        icon: Icon(Icons.add),
+                        labelText: 'Faculty'
                     ),
-                    controller: _passwordConfirmController,
+                    controller: _facultyController,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
-                        return 'Provide Password Confirmation';
+                        return 'Provide  Faculty';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.confirmation_number),
+                        hintText: 'Enter your department',
+                        labelText: 'Department'
+                    ),
+                    controller: _departmentController,
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Provide Department';
                       }
                       return null;
                     },
@@ -168,7 +225,7 @@ class _RegistrationState extends State<Registration>{
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                   child: TextFormField(
-                    obscureText: true,
+                    //obscureText: true,
                     decoration: InputDecoration(
                         icon: Icon(Icons.date_range),
                         hintText: '01/01/2020',
@@ -212,6 +269,7 @@ class _RegistrationState extends State<Registration>{
                         });
                       }, value: selectedType,
                       hint: Text('Gender'),
+
 
                     )
 
@@ -291,7 +349,7 @@ class _RegistrationState extends State<Registration>{
 
   signUp () async {
     if ( _formKeyValue.currentState.validate() ) {
-      print("Fullname: ${_fullnameController.text}\nMatriculation: ${_matriculationController.text}\nUsername:: ${_usernameController.text}\nPassword: ${_passwordController.text}\nPassword Confirmation: ${_passwordConfirmController.text}\nDate of birth: ${_dobController.text}\n");
+      print("Fullname: ${_fullnameController.text}\nEmail: ${_emailController.text}\nAddress: ${_addressController.text}\nUsername: ${_usernameController.text}\nPassword: ${_passwordController.text}\nFaculty: ${_facultyController.text}\nDate of birth: ${_dobController.text}\nDepartment: ${_departmentController.text}\n");
     }
   }
 

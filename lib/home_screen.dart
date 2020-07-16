@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:schoolapp/login.dart';
+import 'courseList.dart';
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -12,17 +14,21 @@ class _HomeScreenState extends State<HomeScreen> {
   
   String username = "name";
   String email = "email";
-  
+
+
+
   final storage = new FlutterSecureStorage();
 
   void getUserProfile() async {
     String name = await storage.read(key: "username");
     String mail = await storage.read(key: "email");
+
     print(name);
 
     setState(() {
       username = name;
       email = mail;
+
     });
   }
 
@@ -87,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                                           ListTile(
                                                               dense: true,
-                                                              leading: Text('Faculty :', style: TextStyle (color: Colors.green)),
+                                                              leading: Text('Faculty:', style: TextStyle (color: Colors.green)),
                                                               title: Text('Faculty of Engineering and Technology', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                                                             ),
                                                                 ListTile(
@@ -205,15 +211,40 @@ class _HomeScreenState extends State<HomeScreen> {
                          ),
 
                          elevation: 10,
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: <Widget>[
 
-                             SvgPicture.asset('assets/images/study.svg', height: 100,),
-                             Text('Register Courses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
-                                 fontStyle: FontStyle.italic, color: Colors.green),
+                         child: InkWell(
+
+                             onTap: (){
+                               Navigator.push(context,MaterialPageRoute(
+                                   builder: (context)=> CourseList()
+                               ));
+
+                             },
+
+                           child: Padding(
+                             padding: const EdgeInsets.all(8.0),
+
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+
+
+                               children: <Widget>[
+
+
+
+                                 SvgPicture.asset('assets/images/study.svg',
+                                   alignment: Alignment.center,
+                                   height: 100, ),
+
+
+                                 Text('Register Courses', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
+                                     fontStyle: FontStyle.italic, color: Colors.green),
+                                 ),
+
+
+                               ],
                              ),
-                           ],
+                           ),
                          ),
 
                        ),
