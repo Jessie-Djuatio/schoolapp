@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:schoolapp/login.dart';
 
+import 'service/authService.dart';
+
 class Registration extends StatefulWidget {
   @override
   _RegistrationState createState() => _RegistrationState();
@@ -11,11 +13,13 @@ class _RegistrationState extends State<Registration>{
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _fullnameController = new TextEditingController();
-  TextEditingController _matriculationController = new TextEditingController();
+  TextEditingController _nationalIdController = new TextEditingController();
   TextEditingController _dobController = new TextEditingController();
   TextEditingController _facultyController = new TextEditingController();
   TextEditingController _departmentController = new TextEditingController();
   TextEditingController _addressController = new TextEditingController();
+
+  String _genderValue = "M";
 
 
   final GlobalKey<FormState> _formKeyValue =
@@ -115,7 +119,7 @@ class _RegistrationState extends State<Registration>{
                         hintText: 'Enter your NationalID number',
                         labelText: 'National ID number'
                     ),
-                     controller: _matriculationController,
+                     controller: _nationalIdController,
                     validator: (text) {
                       if (text == null || text.isEmpty) {
                         return 'Provide National ID number';
@@ -254,24 +258,21 @@ class _RegistrationState extends State<Registration>{
                     SizedBox(
                       width: 15.0,
                     ),
-                    DropdownButton(
-                      //icon: Icon(Icons.face),
-                      items: _gender.map((value)=>DropdownMenuItem(
-                        child: Text(value,
-                        //style: TextStyle(color: Colors.blueGrey)
-                        ),
-
-                        value: value,
-                      ),).toList(),
-                      onChanged: (selectedGenderType){
+                    DropdownButton<String>(
+                      value: _genderValue,
+                      onChanged: (String newValue) {
                         setState(() {
-                          selectedType=selectedGenderType;
+                          _genderValue = newValue;
                         });
-                      }, value: selectedType,
-                      hint: Text('Gender'),
-
-
-                    )
+                      },
+                      items: <String>['M', 'F']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
 
 
                   ],
@@ -349,7 +350,21 @@ class _RegistrationState extends State<Registration>{
 
   signUp () async {
     if ( _formKeyValue.currentState.validate() ) {
-      print("Fullname: ${_fullnameController.text}\nEmail: ${_emailController.text}\nAddress: ${_addressController.text}\nUsername: ${_usernameController.text}\nPassword: ${_passwordController.text}\nFaculty: ${_facultyController.text}\nDate of birth: ${_dobController.text}\nDepartment: ${_departmentController.text}\n");
+      print("FullName: ${_fullnameController.text}\nEmail: ${_emailController.text}\nAddress: ${_addressController.text}\nUsername: ${_usernameController.text}\nPassword: ${_passwordController.text}\nFaculty: ${_facultyController.text}\nDate of birth: ${_dobController.text}\nDepartment: ${_departmentController.text}\n Gender: ${_genderValue}");
+
+      dynamic response = await AuthService.signup(
+          username: _usernameController.text,
+          password: _passwordController.text,
+          email: _emailController.text,
+          department: _departmentController.text,
+          nationalId: _nationalIdController.text,
+          address: _addressController.text,
+          fullName: _fullnameController.text,
+          faculty: _facultyController.text,
+          gender: _genderValue,
+          dateOfBirth: _dobController.text);
+
+          print(response);
     }
   }
 

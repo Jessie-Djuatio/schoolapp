@@ -68,8 +68,11 @@ class AuthService {
     @required String username, 
     @required String password,
     @required String email, 
-    @required String matriculation, 
-    @required String fullname, 
+    @required String department,
+    @required String nationalId,
+    @required String address,
+    @required String fullName,
+    @required String faculty,
     @required String gender, 
     @required String dateOfBirth,
   }) async {
@@ -94,16 +97,20 @@ class AuthService {
       Response response = await dioAuth.post(uri, data: {
         "username": username,
         "password": password,
-        "matriculation": matriculation,
+        "faculty": faculty,
+        "department": department,
+        "nationalid": nationalId,
         "email": email,
-        "fullname": fullname,
-        "gender": gender,
-        "dob": dateOfBirth
+        "realname": fullName,
+        "sex": gender,
+        "dob": dateOfBirth,
+        "address": address,
+
       });
 
       if (response.statusCode == 200) {return json.decode(response.data);}
       else if (response.statusCode == 400) {return "400";}
-      else {return 'error';}
+      else {return "error";}
 
     } on DioError catch (exception) {
       if (exception == null ||

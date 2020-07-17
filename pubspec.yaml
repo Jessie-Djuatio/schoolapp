@@ -17,7 +17,6 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  flutter_paystack: ^1.0.3+1
 
   flutter:
     sdk: flutter
