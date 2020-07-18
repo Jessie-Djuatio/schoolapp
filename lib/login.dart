@@ -31,15 +31,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('School App',),
+        title: Text(' SMARTECOLE', style: TextStyle(fontWeight: FontWeight.w500, fontStyle: FontStyle.italic),),
          centerTitle: true,
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.white,
       ),
 
-    ),
+    ),*/
           body:
       Container(
         width: double.infinity,
@@ -57,20 +57,22 @@ class _LoginPageState extends State<LoginPage> {
 
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(top:14.0, bottom: 50.0),
+                      padding: const EdgeInsets.only(top:30.0, bottom: 50.0),
                       child:
                           Column(
 
                                children: <Widget>[
                                   CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: AssetImage('assets/images/bg13.jpeg'),
+                                  radius: 80,
+                                  backgroundImage: AssetImage('assets/images/logo2.png'),
                                 ),
 
-                                Text('University of Buea', style: TextStyle(fontSize: 30.0, color: Colors.green, fontStyle: FontStyle.italic),),
+
                    ] ),)
                   ],
                 ),
+
+               // Text(' Login ', style: TextStyle(fontSize: 30.0, color: Colors.green, fontStyle: FontStyle.italic),),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal:20.0, vertical: 0.0),
                   child: TextFormField(
@@ -206,14 +208,34 @@ class _LoginPageState extends State<LoginPage> {
       print(response);
 
       if (response != "error"){
-        SecureStorage.userProfileStorage(id: response["id"].toString(), username: response["username"], email: response["email"], token: response["accessToken"]);
+        
+        dynamic profile = await AuthService.userProfile(id: response["id"].toString(), token: response["accessToken"]);
+
+        print('ok');
+        print('$profile');
+        
+        //SecureStorage.userProfileStorage(id: response["id"].toString(), username: response["username"], email: response["email"], token: response["accessToken"]);
+        SecureStorage.userProfileStorage(
+            id: response["id"].toString(),
+            token: response["accessToken"],
+            username: response["username"],
+            email: response["email"],
+            fullName: profile["student_name"],
+            faculty: profile["student_faculty"],
+            department: profile["student_dept"],
+            matricule: profile["student_matricule"],
+            address: profile["address"],
+            dob: profile["dob"],
+            level: profile["student_level"]);
 
         setState(() {
         _buttonState = true;
         });
+
         Navigator.push(context,MaterialPageRoute(
             builder: (context)=> HomeScreen()
         ));
+
       }
       else {
         setState(() {

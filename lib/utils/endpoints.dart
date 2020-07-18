@@ -7,4 +7,7 @@ class Endpoints {
   //Routes d'authentification
   static String login = 'auth/student/signin';
   static String register = 'auth/student/signup';
+
+  //Other routes
+  static String userProfile = 'student/profile/id/';
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schoolapp/login.dart';
 
+import 'home_screen.dart';
 import 'service/authService.dart';
+import 'service/secureStorage.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -21,9 +23,9 @@ class _RegistrationState extends State<Registration>{
 
   String _genderValue = "M";
 
+  bool _buttonState = true;
 
-  final GlobalKey<FormState> _formKeyValue =
-  new GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
   var selectedType,
    key = GlobalKey;
   List<String> _gender=<String>[
@@ -37,7 +39,7 @@ class _RegistrationState extends State<Registration>{
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('School App',),
+        title: Text('Registration Form',),
         centerTitle: true,
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.white,
@@ -61,14 +63,14 @@ class _RegistrationState extends State<Registration>{
 
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(top:14.0, bottom: 50.0),
+                      padding: const EdgeInsets.only(top:0.0, bottom: 50.0),
                       child:
                       Column(
 
                           children: <Widget>[
 
 
-                            Text('Registration Form', style: TextStyle(fontSize: 30.0, color: Colors.green, fontStyle: FontStyle.italic),),
+                            //Text('Registration Form', style: TextStyle(fontSize: 30.0, color: Colors.green, fontStyle: FontStyle.italic),),
                           ] ),)
                   ],
                 ),
@@ -281,7 +283,7 @@ class _RegistrationState extends State<Registration>{
 
 
 
-                Row(
+                _buttonState ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
@@ -319,7 +321,9 @@ class _RegistrationState extends State<Registration>{
 
                   ],
 
-                ),
+                )
+                :
+                CircularProgressIndicator(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -350,6 +354,9 @@ class _RegistrationState extends State<Registration>{
 
   signUp () async {
     if ( _formKeyValue.currentState.validate() ) {
+      setState(() {
+        _buttonState = false;
+      });
       print("FullName: ${_fullnameController.text}\nEmail: ${_emailController.text}\nAddress: ${_addressController.text}\nUsername: ${_usernameController.text}\nPassword: ${_passwordController.text}\nFaculty: ${_facultyController.text}\nDate of birth: ${_dobController.text}\nDepartment: ${_departmentController.text}\n Gender: ${_genderValue}");
 
       dynamic response = await AuthService.signup(
@@ -365,6 +372,30 @@ class _RegistrationState extends State<Registration>{
           dateOfBirth: _dobController.text);
 
           print(response);
+
+          if (response != "error") {
+            setState(() {
+              _buttonState = true;
+            });
+            Navigator.push(context,MaterialPageRoute(
+                builder: (context)=> LoginPage()
+            ));
+
+            dynamic login = await AuthService.login(username: _usernameController.text, password: _passwordController.text);
+
+            if (login != "error"){
+              dynamic profile = await AuthService.userProfile(id: response["id"].toString(), token: response["accessToken"]);
+              print(profile);
+
+              if (profile != "error"){
+                print(login);
+
+              }
+            }
+
+          }
+
+
     }
   }
 

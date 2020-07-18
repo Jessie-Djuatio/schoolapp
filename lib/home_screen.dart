@@ -4,6 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:schoolapp/login.dart';
+import 'package:schoolapp/payFees.dart';
+import 'package:schoolapp/results.dart';
+import 'package:schoolapp/userProfile.dart';
+import 'package:schoolapp/utils/resultsHome.dart';
 import 'courseList.dart';
 class HomeScreen extends StatefulWidget {
   @override
@@ -186,23 +190,31 @@ class _HomeScreenState extends State<HomeScreen> {
                        primary: false,
                        crossAxisCount: 2,
                      children: <Widget>[
-                       Card(
-                         shape: RoundedRectangleBorder(
-                           borderRadius: BorderRadius.circular(15)
+                       InkWell(
+                          onTap: (){
+                            Navigator.push(context,MaterialPageRoute(
+                            builder: (context)=> UserProfile()
+                            ));
+
+                          },
+                         child: Card(
+                           shape: RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(15)
+                           ),
+
+                           elevation: 10,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: <Widget>[
+
+                               SvgPicture.asset('assets/images/controls.svg', height: 100,),
+                               Text('Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
+                                   fontStyle: FontStyle.italic, color: Colors.green),
+                               ),
+                             ],
+                           ),
+
                          ),
-
-                         elevation: 10,
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: <Widget>[
-
-                             SvgPicture.asset('assets/images/controls.svg', height: 100,),
-                             Text('Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
-                                 fontStyle: FontStyle.italic, color: Colors.green),
-                             ),
-                           ],
-                         ),
-
                        ),
                        Card(
 
@@ -218,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                Navigator.push(context,MaterialPageRoute(
                                    builder: (context)=> CourseList()
                                ));
-
                              },
 
                            child: Padding(
@@ -248,27 +259,36 @@ class _HomeScreenState extends State<HomeScreen> {
                          ),
 
                        ),
-                       Card(
-                         shape: RoundedRectangleBorder(
-                             borderRadius: BorderRadius.circular(15)
+                       InkWell(
+                         onTap: (){
+                           Navigator.push(context,MaterialPageRoute(
+                               builder: (context)=> ResultsHome()
+                           ));
+                         },
+                         child: Card(
+                           shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(15)
+                           ),
+
+                           elevation: 10,
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: <Widget>[
+
+                               SvgPicture.asset('assets/images/design-tool.svg', height: 100,),
+                               Text('Results', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
+                                   fontStyle: FontStyle.italic, color: Colors.green),
+                               ),
+                             ],
+                           ),
+
                          ),
-
-                         elevation: 10,
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: <Widget>[
-
-                             SvgPicture.asset('assets/images/design-tool.svg', height: 100,),
-                             Text('Results', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,
-                                 fontStyle: FontStyle.italic, color: Colors.green),
-                             ),
-                           ],
-                         ),
-
                        ),
                        GestureDetector(
                          onTap: (){
-
+                           Navigator.push(context,MaterialPageRoute(
+                               builder: (context)=> PayFees()
+                           ));
                          },
                          child: Card(
                            shape: RoundedRectangleBorder(
